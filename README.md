@@ -32,8 +32,7 @@ GUI v2 connects to the MQTT web socket at the root of the host (`/websocket-mqtt
     ### **WORK IN PROGRESS**
 -->
 ## Changelog
-
-### **WORK IN PROGRESS**
+### 1.0.2 (2026-11-05)
 - (copilot) Adapter requires node.js >= 22.19.0 now
 - (@GermanBluefox) ioBroker.web can stop the web extension and start it again with new settings instead of restarting itself (`supportsHotReload`, with a version of web that supports it). When it is stopped, the web extension now also closes the connections of GUI v2 to the Cerbo
 
@@ -52,9 +51,6 @@ GUI v2 connects to the MQTT web socket at the root of the host (`/websocket-mqtt
 
 ### 0.1.0 (2026-04-11)
 * (@GermanBluefox) Corrected some states
-
-### 0.0.1
-* Initial release
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

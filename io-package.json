@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "victron-cerbo",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "news": {
+      "1.0.2": {
+        "en": "Adapter requires node.js >= 22.19.0 now\nioBroker.web can stop the web extension and start it again with new settings instead of restarting itself (`supportsHotReload`, with a version of web that supports it). When it is stopped, the web extension now also closes the connections of GUI v2 to the Cerbo",
+        "de": "Adapter benötigt jetzt node.js >= 22.19.0\nioBroker.Web kann die Erweiterung beenden und mit neuen Einstellungen starten, statt sich selbst neu zu starten (`supportHotReload`, mit einer Webversion, die das unterstützt). Wenn es gestoppt ist, schließt das Web Extension jetzt auch GUI v2 zum Cerbo",
+        "ru": "Теперь для адаптера требуется файл node.js >= 22.19.0\nIOBroker.web может остановить веб-расширение и запустить его снова с новыми настройками вместо перезапуска (`supportShotReload`, с поддерживающей его веб-версией). После остановки веб-расширение теперь также закрывает соединения GUI v2 с Cerbo",
+        "pt": "O adaptador exige node.js >= 22.19.0\nIOBroker.web pode parar a extensão web e reiniciá-la com novas configurações em vez de se reiniciar (`supportShotreload`, com uma versão da web compatível). Ao parar, a extensão web agora também fecha as conexões da GUI v2 com o Cerbo",
+        "nl": "Voor de adapter is nu node.js >= 22.19.0 nodig\nIOBroker.web kan de webextensie stoppen en opnieuw starten met nieuwe instellingen in plaats van zichzelf opnieuw op te starten (`SupportHotReload`, met een webversie die dit ondersteunt). Als de webextensie is gestopt, sluit de webextensie nu ook de verbindingen van GUI v2 met de Cerbo",
+        "fr": "Adapter nécessite node.js >= 22.19.0\nIObroker.web peut arrêter l'extension Web et la redémarrer avec de nouveaux paramètres au lieu de la redémarrer toute seule (« SupportShotReload », avec une version du Web compatible). À l'arrêt, l'extension Web ferme également les connexions de la GUI v2 au Cerbo",
+        "it": "Adapter richiede node.js >= 22.19.0 ora\nIOBroker.web può fermare l'estensione web e riavviarla con nuove impostazioni invece di riavviarsi (`SupportShotReload`, con una versione web che la supporta). Quando è fermo, l'estensione web ora chiude anche le connessioni di GUI v2 a Cerbo",
+        "es": "El adaptador ahora necesita node.js >= 22.19.0\nIOBroker.web puede detener la extensión web y volver a iniciarla con nuevos ajustes en lugar de reiniciarse solo (`SupportShotReload`, con una versión web que la admita). Cuando se detiene, la extensión web también cierra las conexiones de la GUI v2 al Cerbo",
+        "pl": "Adapter wymaga teraz node.js >= 22.19.0\nIOBroker.web może zatrzymać rozszerzenie internetowe i uruchomić je ponownie z nowymi ustawieniami zamiast się ponownie uruchamiać (`SupportShotreload`, z wersją sieci, która je obsługuje). Po zatrzymaniu rozszerzenie internetowe zamyka teraz również połączenia GUI v2 z Cerbo",
+        "uk": "Адаптер вимагає node.js >= 22.19.0 зараз\nIObroker.web може зупинити веб-розширення та запустити його знову з новими налаштуваннями замість того, щоб перезавантажувати себе (`SupportShotReload`, з веб-версією, яка підтримує його). Коли його зупиняють, веб-розширення тепер також закриває з'єднання GUI v2 до Cerbo",
+        "zh-cn": "适配器现在需要 node.js >= 22.19.0\niobroker.Web 可以停止网络扩展程序，然后使用新的设置重新启动它，而不是自行重启（`supportShotReload`，使用支持它的网络版本）。停止后，Web 扩展程序现在还会关闭 GUI v2 与 Cerbo 的连接"
+      },
       "1.0.1": {
         "en": "Fixed: the keepalive no longer makes the Cerbo publish all values again\nUnchanged values are not written again",
         "de": "Behoben: Beim Keepalive gibt Cerbo nicht mehr alle Werte aus\nUnveränderte Werte werden nie wieder",
