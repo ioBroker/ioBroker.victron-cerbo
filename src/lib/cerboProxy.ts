@@ -121,6 +121,9 @@ export class CerboProxy {
 
     private readonly log: Logger;
 
+    /** Web socket connections of browsers that are passed on to the Cerbo, closed by {@link close} */
+    private readonly sockets = new Set<Duplex>();
+
     /**
      * @param host host name or IP address of the Cerbo
      * @param log logger
@@ -128,6 +131,14 @@ export class CerboProxy {
     constructor(host: string, log: Logger) {
         this.host = host;
         this.log = log;
+    }
+
+    /** Close every web socket connection to the Cerbo. GUI v2 connects again by itself */
+    close(): void {
+        for (const socket of this.sockets) {
+            socket.destroy();
+        }
+        this.sockets.clear();
     }
 
     /**
@@ -313,6 +324,8 @@ export class CerboProxy {
      */
     handleUpgrade(req: IncomingMessage, socket: Duplex, head: Buffer, path: string): void {
         socket.on('error', err => this.log.debug(`Web socket of the browser failed: ${err.message}`));
+        this.sockets.add(socket);
+        socket.on('close', () => this.sockets.delete(socket));
 
         const headers = this.getRequestHeaders(req.headers);
         headers.connection = 'Upgrade';
@@ -321,6 +334,11 @@ export class CerboProxy {
         const proxyReq = http.request({ host: this.host, port: 80, method: req.method, path, headers });
 
         proxyReq.on('upgrade', (proxyRes, proxySocket, proxyHead) => {
+            // Closed while the Cerbo answered, e.g. by close()
+            if (socket.destroyed) {
+                proxySocket.destroy();
+                return;
+            }
             proxySocket.on('error', () => socket.destroy());
             socket.on('error', () => proxySocket.destroy());
             proxySocket.on('close', () => socket.destroy());

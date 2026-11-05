@@ -99,6 +99,8 @@ class CerboProxy {
     /** Host name or IP address of the Cerbo */
     host;
     log;
+    /** Web socket connections of browsers that are passed on to the Cerbo, closed by {@link close} */
+    sockets = new Set();
     /**
      * @param host host name or IP address of the Cerbo
      * @param log logger
@@ -106,6 +108,13 @@ class CerboProxy {
     constructor(host, log) {
         this.host = host;
         this.log = log;
+    }
+    /** Close every web socket connection to the Cerbo. GUI v2 connects again by itself */
+    close() {
+        for (const socket of this.sockets) {
+            socket.destroy();
+        }
+        this.sockets.clear();
     }
     /**
      * Headers for the request to the Cerbo: those of the browser, without the login of ioBroker
@@ -283,11 +292,18 @@ class CerboProxy {
      */
     handleUpgrade(req, socket, head, path) {
         socket.on('error', err => this.log.debug(`Web socket of the browser failed: ${err.message}`));
+        this.sockets.add(socket);
+        socket.on('close', () => this.sockets.delete(socket));
         const headers = this.getRequestHeaders(req.headers);
         headers.connection = 'Upgrade';
         headers.upgrade = req.headers.upgrade;
         const proxyReq = node_http_1.default.request({ host: this.host, port: 80, method: req.method, path, headers });
         proxyReq.on('upgrade', (proxyRes, proxySocket, proxyHead) => {
+            // Closed while the Cerbo answered, e.g. by close()
+            if (socket.destroyed) {
+                proxySocket.destroy();
+                return;
+            }
             proxySocket.on('error', () => socket.destroy());
             socket.on('error', () => proxySocket.destroy());
             proxySocket.on('close', () => socket.destroy());

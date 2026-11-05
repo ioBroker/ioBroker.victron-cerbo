@@ -27,6 +27,12 @@ class VictronCerboWebExtension {
     proxy = null;
     stopped = false;
     restoreUpgrades = null;
+    /**
+     * Tells `ioBroker.web` that it can stop this extension and start it again with new settings while it keeps
+     * running, instead of restarting itself: `unload()` gives back the upgrades and closes the connections to the
+     * Cerbo, and web takes the route back by itself.
+     */
+    supportsHotReload = true;
     constructor(server, webSettings, adapter, instanceSettings, app) {
         this.adapter = adapter;
         this.webSettings = webSettings;
@@ -61,7 +67,11 @@ class VictronCerboWebExtension {
         }
         const path = url.substring(this.prefix.length);
         void this.isAuthenticated(req).then(ok => {
-            if (ok) {
+            if (this.stopped) {
+                // Unloaded while the login was checked
+                socket.destroy();
+            }
+            else if (ok) {
                 this.proxy.handleUpgrade(req, socket, head, path);
             }
             else {
@@ -120,10 +130,12 @@ class VictronCerboWebExtension {
         };
     }
     unload() {
-        // The express route stays, but passes everything on from now
+        // Newer versions of web drop the express route by themselves; with older ones it stays, but passes
+        // everything on from now
         this.stopped = true;
         this.restoreUpgrades?.();
         this.restoreUpgrades = null;
+        this.proxy?.close();
         return Promise.resolve();
     }
 }
